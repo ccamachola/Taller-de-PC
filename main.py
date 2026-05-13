@@ -42,7 +42,49 @@ def generar_dataset(nombre_archivo, num_muestras=100):
     except Exception as e:
         print(f" Error al guardar el archivo: {e}")
 
+# CÁLCULOS ESTADÍSTICOS
+def leer_dataset(nombre_archivo):
+    ruta = os.path.join("Data", nombre_archivo)
+    
+    try:
+        datos = np.genfromtxt(ruta, delimiter=",", skip_header=1)
+        return datos
+    
+    except FileNotFoundError:
+        print("Error: El archivo no fue encontrado.")
+        return None
+    
+    except Exception as e:
+        print(f"Error al leer el archivo: {e}")
+        return None
+
+def calcular_estadisticas(datos):
+    # Excluir la columna ID
+    datos_numericos = datos[:, 1:]
+    nombres_columnas = [
+        "Tiempo_s",
+        "Temperatura_C",
+        "Presion_hPa"
+    ]
+    print("\n===== ESTADÍSTICAS DEL DATASET =====\n")
+
+    for i, nombre in enumerate(nombres_columnas):
+        columna = datos_numericos[:, i]
+
+        media = np.mean(columna)
+        desviacion = np.std(columna)
+
+        print(f"{nombre}")
+        print(f"Media: {media:.2f}")
+        print(f"Desviación estándar: {desviacion:.2f}")
+        print()
+
+
 if __name__ == "__main__":
     # Generamos el archivo inicial
     generar_dataset("dataset_sintetico.csv")
-
+    # Leemos el dataset
+    datos = leer_dataset("dataset_sintetico.csv")
+    # Calculamos las estadísticas
+    if datos is not None:
+        calcular_estadisticas(datos)
