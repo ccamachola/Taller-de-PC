@@ -109,6 +109,29 @@ def calcular_estadisticas(datos):
         print(f"Desviación estándar: {desviacion:.2f}")
         print()
 
+#FILTADO DE OUTLIERS
+def filtrar_outliers(datos):
+    print("\n===== FILTRO DE OUTLIERS =====\n")
+    #Datos a usar
+    datos_numericos = datos[:,1:]
+
+    #Calculos estadísticos
+    medias = np.mean(datos_numericos, axis=0)
+    desviaciones = np.std(datos_numericos, axis=0)
+    outliers = np.abs(datos_numericos - medias) > (3*desviaciones)
+
+    #Filas con outliers
+    filas_outliers = np.any(outliers, axis=1)
+
+    #Filas a eliminar 
+    cantidad_eliminadas = np.sum(filas_outliers)
+    datos_filtrados = datos[~filas_outliers]
+
+    print(f"Filas eliminadas: {cantidad_eliminadas}")
+    print(f"Filas restantes: {datos_filtrados.shape[0]}")
+    return datos_filtrados
+
+
 
 if __name__ == "__main__":
     # Generamos el archivo inicial
@@ -118,3 +141,7 @@ if __name__ == "__main__":
     # Calculamos las estadísticas
     if datos is not None:
         calcular_estadisticas(datos)
+        #Filtrar Outliers
+        datos_limpios = filtrar_outliers(datos)
+        print("\nESTADÍSTICAS DESPUÉS DEL FILTO")
+        calcular_estadisticas(datos_limpios)
