@@ -143,5 +143,5 @@ if __name__ == "__main__":
         calcular_estadisticas(datos)
         #Filtrar Outliers
         datos_limpios = filtrar_outliers(datos)
-        print("\nESTADÍSTICAS DESPUÉS DEL FILTO")
+        print("\n=====ESTADÍSTICAS DESPUÉS DEL FILTO=====")
         calcular_estadisticas(datos_limpios)
