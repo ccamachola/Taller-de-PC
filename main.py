@@ -131,7 +131,25 @@ def filtrar_outliers(datos):
     print(f"Filas restantes: {datos_filtrados.shape[0]}")
     return datos_filtrados
 
-
+#EXPORTACION DATOS
+def exportar_datos_limpios(datos, nombre_archivo="datos_limpios.csv"):
+    print(f"\n===== EXPORTANDO DATOS =====")
+    ruta = os.path.join("Data", nombre_archivo)
+    
+    # Encabezados requeridos
+    header = "ID,Tiempo_s,Temperatura_C,Presion_hPa"
+    
+    try:
+        # Asegurar carpeta Data
+        if not os.path.exists("Data"):
+            os.makedirs("Data")
+            
+        # Guardar el archivo
+        np.savetxt(ruta, datos, delimiter=",", header=header, comments="", fmt="%.2f")
+        print(f"Éxito: Datos limpios guardados correctamente en '{ruta}'.")
+        
+    except Exception as e:
+        print(f"Error al intentar guardar el archivo de datos limpios: {e}")
 
 if __name__ == "__main__":
     # Generamos el archivo inicial
@@ -143,5 +161,7 @@ if __name__ == "__main__":
         calcular_estadisticas(datos)
         #Filtrar Outliers
         datos_limpios = filtrar_outliers(datos)
-        print("\n=====ESTADÍSTICAS DESPUÉS DEL FILTO=====")
+        print("\n=====ESTADÍSTICAS DESPUÉS DEL FILTRO=====")
         calcular_estadisticas(datos_limpios)
+        #Exportar datos limpios
+        exportar_datos_limpios(datos_limpios, "datos_limpios.csv")
